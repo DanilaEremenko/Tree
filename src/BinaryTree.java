@@ -91,26 +91,28 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         Node<T> parentNode = searchParent(removedNode);
 
 
-        if (removedNode.value.compareTo(root.value) == 0) {
-            if (removedNode.left == null && removedNode.right == null)
-                removedNode=null;
-            else if (removedNode.left == null) {
+        if (removedNode.left == null && removedNode.right == null)
+            removedNode = null;
 
-
-            } else if (removedNode.right == null) {
-
-
+        else if (removedNode.value.compareTo(parentNode.value) < 0) {//Если удаляем левого ребенка
+            if (removedNode.left == null)
+                parentNode.left = removedNode.right;
+            else if (removedNode.right == null)
+                parentNode.left = removedNode.left;
+            else {
+                parentNode.left = removedNode.right;
+                balancing(parentNode.left, removedNode.left);
             }
+        } else if (removedNode.value.compareTo(parentNode.value) > 0) {//Если удаляем правого ребенка
 
-        } else if (removedNode.value.compareTo(parentNode.value) < 0) {//Если удаляемое левое удаляемое относительно родителя
-            parentNode.left = removedNode.right;
-            balancing(parentNode.left, removedNode.left);
-
-        } else if (removedNode.value.compareTo(parentNode.value) > 0) {//Если удаляемое правое относительно корня
-            parentNode.right = removedNode.right;
-            balancing(parentNode.right, removedNode.left);
-
-
+            if (removedNode.left == null)
+                parentNode.right = removedNode.right;
+            else if (removedNode.right == null)
+                parentNode.right = removedNode.left;
+            else {
+                parentNode.right = removedNode.right;
+                balancing(parentNode.right, removedNode.left);
+            }
         }
         return true;
 
@@ -266,9 +268,10 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         binaryTree.add(27);
         binaryTree.add(26);
         binaryTree.add(30);
+        binaryTree.remove(24);
         binaryTree.remove(20);
-        System.out.println("еболо");
-
+        binaryTree.remo
+        System.out.println(binaryTree.checkInvariant());
         //binaryTree.remove(1);
 
         /*
