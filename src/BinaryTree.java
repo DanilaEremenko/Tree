@@ -44,6 +44,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return true;
     }
 
+
     boolean checkInvariant() {
         return root == null || checkInvariant(root);
     }
@@ -55,18 +56,73 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return right == null || right.value.compareTo(node.value) > 0 && checkInvariant(right);
     }
 
-    @Override
-    public boolean remove(Object o) {
-        throw new UnsupportedOperationException();
+
+    //ОКЕЙ ЛЕГКО
+    public Node<T> searchParent(Node<T> child) {
+        if (child == root) return null;
+        Node<T> currentNode = root;
+        Node<T> parent = new Node<>(null);
+        while (currentNode != null) {
+            if (currentNode.left == child) {
+                parent = currentNode;
+                break;
+            }
+            if (currentNode.right == child) {
+                parent = currentNode;
+                break;
+            }
+            if (child.value.compareTo(currentNode.value) > 0) {
+                currentNode = currentNode.right;
+            } else {
+                if (child.value.compareTo(currentNode.value) < 0) {
+                    currentNode = currentNode.left;
+                }
+            }
+        }
+        return parent;
     }
 
+
     @Override
-    public boolean contains(Object o) {
+    public boolean remove(Object o) {
         @SuppressWarnings("unchecked")
-        T t = (T) o;
-        Node<T> closest = find(t);
-        return closest != null && t.compareTo(closest.value) == 0;
+        Node<T> removedNode = find(root, (T) o);
+        if (removedNode == null) return false;
+        Node<T> parentNode = searchParent(removedNode);
+
+
+        if (removedNode.value.compareTo(root.value) == 0) {
+            if (removedNode.left == null && removedNode.right == null)
+                removedNode=null;
+            else if (removedNode.left == null) {
+
+
+            } else if (removedNode.right == null) {
+
+
+            }
+
+        } else if (removedNode.value.compareTo(parentNode.value) < 0) {//Если удаляемое левое удаляемое относительно родителя
+            parentNode.left = removedNode.right;
+            balancing(parentNode.left, removedNode.left);
+
+        } else if (removedNode.value.compareTo(parentNode.value) > 0) {//Если удаляемое правое относительно корня
+            parentNode.right = removedNode.right;
+            balancing(parentNode.right, removedNode.left);
+
+
+        }
+        return true;
+
     }
+
+    private void balancing(Node<T> currentToRoot, Node<T> left) {
+        if (currentToRoot.left != null)
+            balancing(currentToRoot.left, left);
+        else
+            currentToRoot.left = left;
+    }
+
 
     private Node<T> find(T value) {
         if (root == null) return null;
@@ -84,6 +140,14 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             if (start.right == null) return start;
             return find(start.right, value);
         }
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        @SuppressWarnings("unchecked")
+        T t = (T) o;
+        Node<T> closest = find(t);
+        return closest != null && t.compareTo(closest.value) == 0;
     }
 
     public class BinaryTreeIterator implements Iterator<T> {
@@ -114,6 +178,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             throw new UnsupportedOperationException();
         }
     }
+
 
     @NotNull
     @Override
@@ -173,9 +238,69 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
     public static void main(String[] args) {
         BinaryTree<Integer> binaryTree = new BinaryTree<Integer>();
+        //binaryTree.add(8);
+        //binaryTree.add(2);
+        //binaryTree.add(3);
+        //binaryTree.add(7);
+        //binaryTree.add(10);
+        //binaryTree.add(9);
+        //binaryTree.add(5);
+        //binaryTree.add(6);
+        binaryTree.add(9);
         binaryTree.add(5);
+        binaryTree.add(20);
+        binaryTree.add(3);
+        binaryTree.add(7);
+        binaryTree.add(2);
+        binaryTree.add(4);
+        binaryTree.add(7);
         binaryTree.add(6);
-        binaryTree.remove(1);
+        binaryTree.add(8);
+        binaryTree.add(15);
+        binaryTree.add(25);
+        binaryTree.add(13);
+        binaryTree.add(17);
+        binaryTree.add(23);
+        binaryTree.add(21);
+        binaryTree.add(24);
+        binaryTree.add(27);
+        binaryTree.add(26);
+        binaryTree.add(30);
+        binaryTree.remove(20);
+        System.out.println("еболо");
+
+        //binaryTree.remove(1);
+
+        /*
+
+                          8
+                      /       \
+                  2               10
+                   \             /
+                    3           9
+                     \
+                      7
+                     /
+                    5
+                     \
+                      6
+         */
+
+        /*
+
+                          8
+                      /       \
+                  2               10
+                   \             /
+                    3           9
+                     \
+                      7
+                     /
+                    6
+
+         */
 
     }
+
+
 }
