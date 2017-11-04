@@ -94,30 +94,47 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         @SuppressWarnings("unchecked")
         Node<T> removedNode = find(root, (T) o);
         if (removedNode == null) return false;
-        Node<T> parentNode = searchParent(removedNode);
 
-
-        if (removedNode.left == null && removedNode.right == null)
-            removedNode = null;
-
-        else if (removedNode.value.compareTo(parentNode.value) < 0) {//Если удаляем левого ребенка
+        if (removedNode.value.compareTo(root.value) == 0) {//Если корень
             if (removedNode.left == null)
-                parentNode.left = removedNode.right;
+                root = removedNode.right;
             else if (removedNode.right == null)
-                parentNode.left = removedNode.left;
+                root = removedNode.left;
             else {
-                parentNode.left = removedNode.right;
-                balancing(parentNode.left, removedNode.left);
+                root = removedNode.right;
+                balancing(root.left, removedNode.left);
             }
-        } else if (removedNode.value.compareTo(parentNode.value) > 0) {//Если удаляем правого ребенка
 
-            if (removedNode.left == null)
-                parentNode.right = removedNode.right;
-            else if (removedNode.right == null)
-                parentNode.right = removedNode.left;
-            else {
-                parentNode.right = removedNode.right;
-                balancing(parentNode.right, removedNode.left);
+        } else {//Если не корень
+
+            Node<T> parentNode = searchParent(removedNode);
+
+            if (removedNode.left == null && removedNode.right == null) {//Если удаляем узел без детей
+                if (removedNode.value.compareTo(parentNode.value) > 0)
+                    parentNode.right = null;
+                else
+                    parentNode.left = null;
+
+            } else if (removedNode.value.compareTo(parentNode.value) < 0) {//Если удаляем левого ребенка
+                if (removedNode.left == null)
+                    parentNode.left = removedNode.right;
+                else if (removedNode.right == null)
+                    parentNode.left = removedNode.left;
+                else {
+                    parentNode.left = removedNode.right;
+                    balancing(parentNode.left, removedNode.left);
+                }
+
+            } else if (removedNode.value.compareTo(parentNode.value) > 0) {//Если удаляем правого ребенка
+
+                if (removedNode.left == null)
+                    parentNode.right = removedNode.right;
+                else if (removedNode.right == null)
+                    parentNode.right = removedNode.left;
+                else {
+                    parentNode.right = removedNode.right;
+                    balancing(parentNode.right, removedNode.left);
+                }
             }
         }
         size--;
@@ -156,25 +173,55 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
     public class BinaryTreeIterator implements Iterator<T> {
 
-        private Node<T> current = null;
+//        private Node<T> currentNode = null;
+//
+//        private BinaryTreeIterator() {
+//        }
+//
+//        private Node<T> findNext() {
+//            throw new UnsupportedOperationException();
+//        }
+
+
+        private Node<T> currentNode;
+        private int counter;
+        private Node<T> result;
+        private boolean mustGoBack;
+        private Deque<Node<T>> pastRoots;
 
         private BinaryTreeIterator() {
+            pastRoots = new ArrayDeque<>();
+            currentNode = root;
+            counter = size;
         }
 
         private Node<T> findNext() {
-            throw new UnsupportedOperationException();
+            result = currentNode;
+            if (!mustGoBack && currentNode.left != null) {
+                pastRoots.add(currentNode);
+                currentNode = currentNode.left;
+                return findNext();
+            } else if (currentNode.right != null) {
+                currentNode = currentNode.right;
+                mustGoBack = false;
+            } else {
+                currentNode = pastRoots.pollLast();
+                mustGoBack = true;
+            }
+            counter--;
+            return result;
         }
 
         @Override
         public boolean hasNext() {
-            return findNext() != null;
+            return counter != 0;
         }
 
         @Override
         public T next() {
-            current = findNext();
-            if (current == null) throw new NoSuchElementException();
-            return current.value;
+            findNext();
+            if (result == null) throw new NoSuchElementException();
+            return result.value;
         }
 
         @Override
