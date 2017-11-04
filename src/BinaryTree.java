@@ -270,9 +270,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         binaryTree.add(30);
         binaryTree.remove(24);
         binaryTree.remove(20);
-        binaryTree.remo
+        binaryTree.remove(5);
         System.out.println(binaryTree.checkInvariant());
-        //binaryTree.remove(1);
+
 
         /*
 
