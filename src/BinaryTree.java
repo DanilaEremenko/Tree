@@ -44,7 +44,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return true;
     }
 
-
     boolean checkInvariant() {
         return root == null || checkInvariant(root);
     }
@@ -56,8 +55,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return right == null || right.value.compareTo(node.value) > 0 && checkInvariant(right);
     }
 
-
-    //ОКЕЙ ЛЕГКО
+    //REMOVE
+    //
+    //
     public Node<T> searchParent(Node<T> child) {
         if (child == root) return null;
         Node<T> currentNode = root;
@@ -82,6 +82,12 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return parent;
     }
 
+    private void balancing(Node<T> currentToRoot, Node<T> left) {
+        if (currentToRoot.left != null)
+            balancing(currentToRoot.left, left);
+        else
+            currentToRoot.left = left;
+    }
 
     @Override
     public boolean remove(Object o) {
@@ -114,17 +120,13 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                 balancing(parentNode.right, removedNode.left);
             }
         }
+        size--;
         return true;
 
     }
-
-    private void balancing(Node<T> currentToRoot, Node<T> left) {
-        if (currentToRoot.left != null)
-            balancing(currentToRoot.left, left);
-        else
-            currentToRoot.left = left;
-    }
-
+    //
+    //
+    //REMOVE
 
     private Node<T> find(T value) {
         if (root == null) return null;
@@ -252,7 +254,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         binaryTree.add(5);
         binaryTree.add(20);
         binaryTree.add(3);
-        binaryTree.add(7);
         binaryTree.add(2);
         binaryTree.add(4);
         binaryTree.add(7);
