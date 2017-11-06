@@ -1,12 +1,9 @@
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Iterator;
-
 import static org.junit.Assert.*;
 
 public class BinaryTreeTest {
-    BinaryTree<Integer> binaryTree = new BinaryTree<>();
+    private BinaryTree<Integer> binaryTree = new BinaryTree<>();
 
     @Before
     public void terms() {
@@ -34,27 +31,30 @@ public class BinaryTreeTest {
     @Test
     public void remove() {
 
-
         //Удаление узла с двумя детьми
         binaryTree.remove(5);
-        System.out.println(binaryTree.contains(5));
-        System.out.println(binaryTree.checkInvariant());
+        assertEquals(false,binaryTree.contains(5));
+        assertEquals(true,binaryTree.checkInvariant());
 
         //Удаление узла без детей
         binaryTree.remove(30);
-        System.out.println(binaryTree.contains(30));
-        System.out.println(binaryTree.checkInvariant());
+        assertEquals(false,binaryTree.contains(30));
+        assertEquals(true,binaryTree.checkInvariant());
 
         //Удаление узла с одним ребенком
         binaryTree.remove(27);
-        System.out.println(binaryTree.contains(27));
-        System.out.println(binaryTree.checkInvariant());
+        assertEquals(false,binaryTree.contains(27));
+        assertEquals(true,binaryTree.checkInvariant());
 
         //Удаление корня
         binaryTree.remove(9);
-        System.out.println(binaryTree.contains(9));
-        System.out.println(binaryTree.checkInvariant());
+        assertEquals(false,binaryTree.contains(9));
+        assertEquals(true,binaryTree.checkInvariant());
 
+        //Удаление несуществующего узла
+        binaryTree.remove(100);
+        assertEquals(false,binaryTree.contains(100));
+        assertEquals(true,binaryTree.checkInvariant());
 
     }
 
