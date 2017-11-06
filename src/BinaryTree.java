@@ -171,19 +171,10 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return closest != null && t.compareTo(closest.value) == 0;
     }
 
+
     public class BinaryTreeIterator implements Iterator<T> {
 
-//        private Node<T> currentNode = null;
-//
-//        private BinaryTreeIterator() {
-//        }
-//
-//        private Node<T> findNext() {
-//            throw new UnsupportedOperationException();
-//        }
-
-
-        private Node<T> currentNode;
+        private Node<T> currentNode = null;
         private int counter;
         private Node<T> result;
         private boolean mustGoBack;
@@ -195,6 +186,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             counter = size;
         }
 
+        //findNext
+        //
+        //
         private Node<T> findNext() {
             result = currentNode;
             if (!mustGoBack && currentNode.left != null) {
@@ -211,6 +205,9 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             counter--;
             return result;
         }
+        //
+        //
+        //findNext
 
         @Override
         public boolean hasNext() {
@@ -287,71 +284,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return current.value;
     }
 
-    public static void main(String[] args) {
-        BinaryTree<Integer> binaryTree = new BinaryTree<Integer>();
-        //binaryTree.add(8);
-        //binaryTree.add(2);
-        //binaryTree.add(3);
-        //binaryTree.add(7);
-        //binaryTree.add(10);
-        //binaryTree.add(9);
-        //binaryTree.add(5);
-        //binaryTree.add(6);
-        binaryTree.add(9);
-        binaryTree.add(5);
-        binaryTree.add(20);
-        binaryTree.add(3);
-        binaryTree.add(2);
-        binaryTree.add(4);
-        binaryTree.add(7);
-        binaryTree.add(6);
-        binaryTree.add(8);
-        binaryTree.add(15);
-        binaryTree.add(25);
-        binaryTree.add(13);
-        binaryTree.add(17);
-        binaryTree.add(23);
-        binaryTree.add(21);
-        binaryTree.add(24);
-        binaryTree.add(27);
-        binaryTree.add(26);
-        binaryTree.add(30);
-        binaryTree.remove(24);
-        binaryTree.remove(20);
-        binaryTree.remove(5);
-        System.out.println(binaryTree.checkInvariant());
-
-
-        /*
-
-                          8
-                      /       \
-                  2               10
-                   \             /
-                    3           9
-                     \
-                      7
-                     /
-                    5
-                     \
-                      6
-         */
-
-        /*
-
-                          8
-                      /       \
-                  2               10
-                   \             /
-                    3           9
-                     \
-                      7
-                     /
-                    6
-
-         */
-
-    }
-
-
 }
+
+
+
